@@ -98,7 +98,7 @@ function Sidebar(props: any) {
         className='sider'
         width='none'  
       >
-        {!userAccount &&
+        {userAccount === '0x0000000000000000000000000000000000000000' &&
           <Button
             type='primary'
             block={true}
@@ -108,7 +108,7 @@ function Sidebar(props: any) {
           </Button>
         }
 
-        {userAccount && 
+        {userAccount != '0x0000000000000000000000000000000000000000' && 
           <div>
             <p>{sliceAddress(userAccount)}</p>
             <p>Balance: {userBalance} ETH</p>
