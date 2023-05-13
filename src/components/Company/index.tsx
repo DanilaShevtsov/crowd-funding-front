@@ -30,8 +30,8 @@ export default function Company({data}: CompanyProps) {
                 }
                 <Progress percent={Number((data.balance/ data.goal * 100).toFixed(2))} strokeColor={{ '0%': '#108ee9', '100%': '#87d068' }} />
                 <div className='balance-progress'>
-                    <span><b>Current Balance:</b> {roundNumber(data.balance, 18, 4)} ETH</span>
-                    <span><b>Goal:</b> {roundNumber(data.goal, 18, 4)} ETH</span>
+                    <span><b>Current Balance:</b> {roundNumber(data.balance, 0, 4)} ETH</span>
+                    <span><b>Goal:</b> {roundNumber(data.goal, 0, 4)} ETH</span>
                 </div>
                 <span>Creator: {data.owner.pubKey}</span>
             </div>
