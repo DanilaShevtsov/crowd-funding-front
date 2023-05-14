@@ -1,13 +1,9 @@
 import { Layout, Button, Menu } from 'antd';
 import type { MenuProps } from 'antd';
 import { useMetamask } from '../../../hooks/useMetamask';
-import { useEffect, useState } from 'react';
-import { useAccountBalance } from '../../../hooks/useAccountBalance';
 import { connect } from 'react-redux';
 import { AuthJWT } from '../../../interfaces/auth';
-import { auth } from '../../../lib/auth'
-import actions  from '../../../redux/auth/actions';
-import { Pages } from '../../../enums/pages.enum';
+import { Pages } from '../enums/pages.enum';
 import { Role } from '../../../enums/roles.enum';
 import { User } from '../../../interfaces/user';
 
@@ -35,13 +31,9 @@ function sliceAddress(address: string) {
 }
 
 const sideBarMenuItems: MenuItem[] = [
-  getItem('Main page', Pages.MAIN),
-  getItem('All projects', Pages.ALL_PROJECTS),
-  getItem('Beneficiar cabinet', Pages.BENEFICIAR_CABINET, null, [
-    getItem('Create Company', Pages.CREATE_COMPANY),
-    getItem('My Companies', Pages.MY_COMPANIES)
-  ]),
-  { type: 'divider'} 
+  getItem('All Accounts', Pages.ALL_ACCOUNTS),
+  getItem('All Transactions', Pages.ALL_TRANSACTIONS),
+  getItem('All Companies', Pages.ALL_COMPANIES),
 ];
 
 interface SiderProps {
@@ -95,10 +87,9 @@ export default function Sidebar(props: SiderProps) {
         <Menu
           theme='dark'
           items={sideBarMenuItems}
-          defaultSelectedKeys={[Pages.MAIN]}
+          defaultSelectedKeys={[Pages.ALL_ACCOUNTS]}
           onClick={({ key }) => {
-            console.log(key);
-            // onChangeMenu(key);
+            onChangeMenu(key as Pages);
           }}
         />
       </Sider>

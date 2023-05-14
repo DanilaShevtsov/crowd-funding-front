@@ -1,6 +1,6 @@
 import { Button, Layout, theme } from 'antd';
 import { useEffect, useState } from 'react';
-import { Pages } from '../../../enums/pages.enum'
+import { Pages } from '../enums/pages.enum'
 import Sidebar from '../Sidebar';
 import { auth } from '../../../lib/auth'
 
@@ -9,6 +9,9 @@ import { useMetamask } from '../../../hooks/useMetamask';
 import { AuthJWT } from '../../../interfaces/auth';
 import { User } from '../../../interfaces/user';
 import { Role } from '../../../enums/roles.enum';
+import AllAccounts from '../AllAccounts';
+import AllTransactions from '../AllTransactions';
+import AllCompanies from '../AllCompanies';
 
 const { Header, Content, Footer } = Layout;
 
@@ -94,6 +97,11 @@ export default function Admin() {
                         <Sidebar token={token} user={user} onChangeMenu={changeMenu} />
                         <Layout>
                         <Content className='content'> 
+                        { page === Pages.ALL_ACCOUNTS &&
+                            <AllAccounts/>
+                        }
+                        { page === Pages.ALL_TRANSACTIONS && <AllTransactions/>}
+                        { page === Pages.ALL_COMPANIES && <AllCompanies/>}
                         </Content>
                         <Footer className='footer'> Footer exists. Just trust me!</Footer>
                         </Layout>
