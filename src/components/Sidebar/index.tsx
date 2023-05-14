@@ -8,6 +8,9 @@ import { AuthJWT } from '../../interfaces/auth';
 import { auth } from '../../lib/auth'
 import actions  from '../../redux/auth/actions';
 import { Pages } from '../../enums/pages.enum';
+import { useNavigate } from 'react-router-dom';
+import { User } from '../../interfaces/user';
+import { Role } from '../../enums/roles.enum';
 
 const { Sider } = Layout;
 type MenuItem = Required<MenuProps>['items'][number];
@@ -43,6 +46,7 @@ const sideBarMenuItems: MenuItem[] = [
 ];
 
 function Sidebar(props: any) {
+  const navigate = useNavigate();
   const {
     authSuccess,
     onChangeMenu,
@@ -58,6 +62,8 @@ function Sidebar(props: any) {
   const isActive: boolean = useIsActive();
   const isActivating: boolean = useIsActivating();
 
+  const [user, setUser] = useState<User>();
+
   async function connect() {
     connectMetamask();
   }
@@ -69,7 +75,7 @@ function Sidebar(props: any) {
     const jwt: AuthJWT = await login(message, userAccount, signature);
     const authorized: boolean = await verifyLogin(jwt);
     const user = await getUserInfo(jwt);
-
+    setUser(user);
     authSuccess({ token: jwt.token, address: userAccount, userId: user.id});
     
     if (!authorized) {
@@ -96,6 +102,10 @@ function Sidebar(props: any) {
 
   return (
       <Sider
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+        }}
         className='sider'
         width='none'  
       >
@@ -123,6 +133,11 @@ function Sidebar(props: any) {
             onChangeMenu(key);
           }}
         />
+        {user !== undefined && (user.role === Role.ADMIN || user.role === Role.SUPER_ADMIN) &&
+          <div style={{ display: 'flex', justifyContent: 'center' }} onClick={() => navigate('/admin')} >
+            <Button danger type='dashed' >Admin Panel</Button>
+          </div>
+        }
       </Sider>
   );
 }
