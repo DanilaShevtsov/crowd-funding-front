@@ -6,7 +6,7 @@ import { companiesLib } from '../../lib/companies';
 import { CompanyData } from '../../interfaces/companyData';
 
 import './index.css';
-import { Button, DatePicker, Form, Input, InputNumber, message, notification, Radio, Upload } from 'antd';
+import { Button, DatePicker, Form, Input, InputNumber, message, notification, Upload, UploadProps } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { PlusOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
@@ -25,6 +25,7 @@ function CreateCompanyForm(props: any) {
         loadAuthStorage,
     } = props
     
+    const [imageFile, setImageFile] = useState();
     const [createDescription, setCreateDescription] = useState("");
     const [createStatus, setCreateStatus] = useState<NotificationType>(NotificationType.INFO);
 
@@ -53,8 +54,11 @@ function CreateCompanyForm(props: any) {
     }, [createStatus])
 
     const onFinish = async (values: any) => {
+      console.log(values)
       values.goal = Number(values.goal);
       values.timeout = values.timeout[1].toJSON();
+      values.image = values.image[0].url;
+      console.log(values)
       const { createNewCompany } = companiesLib();
       try {
         const result = await createNewCompany(auth.token, values);
@@ -73,6 +77,25 @@ function CreateCompanyForm(props: any) {
 
     const rangeConfig = {
       rules: [{ type: 'array' as const, required: true, message: 'Please select time!', }],
+    };
+
+    const uploadProps: UploadProps = {
+      name: 'image',
+      action: 'https://api.imgbb.com/1/upload?key=a9daf675b1fe261f9461ad6d4d4a806f',
+      listType: "picture-card",
+      onChange(info: any) {
+        console.log(info)
+        if (info.file.status !== 'uploading') {
+          console.log(info.file, info.fileList);
+        }
+        if (info.file.status === 'done') {
+          info.file.url = info.file.response.data.display_url;
+          setImageFile(info.file.response.data.display_url)
+          message.success(`${info.file.name} file uploaded successfully`);
+        } else if (info.file.status === 'error') {
+          message.error(`${info.file.name} file upload failed.`);
+        }
+      },
     };
 
     return (
@@ -119,8 +142,8 @@ function CreateCompanyForm(props: any) {
         disabled={[true, false]}/>
       </Form.Item>
 
-      <Form.Item label="Avatar" valuePropName="fileList" getValueFromEvent={normFile}>
-        <Upload action="/upload.do" listType="picture-card">
+      <Form.Item label="Avatar" valuePropName="fileList" getValueFromEvent={normFile} name="image">
+        <Upload {...uploadProps} >
           <div>
             <PlusOutlined />
             <div style={{ marginTop: 8 }}>Upload</div>

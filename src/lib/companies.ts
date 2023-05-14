@@ -60,12 +60,10 @@ export function companiesLib() {
       data: dto
     }
 
-
     const response = await axiosInstance.request(config);
     return response;
   }
   
-  return { getAllCompanies, getPaginatedCompanies, companyById, createNewCompany }
-  
+  return { getAllCompanies, getPaginatedCompanies, createNewCompany, companyById }
 }
 
