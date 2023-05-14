@@ -50,8 +50,6 @@ export function companiesLib() {
     const response = await axiosInstance.request(config);
     return response.data;
   }
-  
-  return { getAllCompanies, getPaginatedCompanies, companyById }
   async function createNewCompany(token: string, dto: any): Promise<any> {
     const config: AxiosRequestConfig = {
       method: 'put',
@@ -67,6 +65,7 @@ export function companiesLib() {
     return response;
   }
   
-  return { getAllCompanies, getPaginatedCompanies, createNewCompany }
+  return { getAllCompanies, getPaginatedCompanies, companyById, createNewCompany }
+  
 }
 
