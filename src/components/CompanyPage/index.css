@@ -1,0 +1,37 @@
+.company-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex-basis: 100%;
+}
+
+.company-page-image {
+    flex-basis: 30%;
+    max-width: 30%;
+    margin-right: 1%;
+}
+
+.company-page-main-info {
+    display: flex;
+    flex-basis: 20%;
+    height: 40%;
+    margin-bottom: 2%;
+}
+
+.company-page-about {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.company-page-progress {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.company-followers {
+    display: flex;
+}

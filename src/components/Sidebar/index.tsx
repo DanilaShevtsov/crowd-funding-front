@@ -47,7 +47,8 @@ function Sidebar(props: any) {
     authSuccess,
     token,
     address,
-    onChangeMenu
+    onChangeMenu,
+    loadAuthStorage
   } = props
   const { hooks, metamask, connectMetamask, signMessage } = useMetamask();
   const { getWelcomeToken, login, verifyLogin } = auth();
@@ -63,6 +64,7 @@ function Sidebar(props: any) {
   }
 
   async function web2Auth() {
+    console.log('auth')
     const message:string = await getWelcomeToken(userAccount);
     const signature: string = await signMessage(message, userAccount);
     const jwt: AuthJWT = await login(message, userAccount, signature);
@@ -90,7 +92,6 @@ function Sidebar(props: any) {
     if (!isActive && !isActivating) {
       metamask.connectEagerly();
     }
-    
   }, [isActive, isActivating]);
 
   return (

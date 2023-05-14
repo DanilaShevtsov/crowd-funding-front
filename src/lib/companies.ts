@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { Routes } from "../enums/routes.enum";
 import { Companies } from "../interfaces/companies";
+import { CompanyData } from "../interfaces/companyData";
 
 export function companiesLib() {
   const axiosInstance: AxiosInstance = axios.create({
@@ -37,7 +38,19 @@ export function companiesLib() {
     const response = await axiosInstance.request(config);
     return response.data;
   }
+
+  async function companyById(token: string, id: string): Promise<CompanyData> {
+    const config: AxiosRequestConfig = {
+      method: 'get',
+      url: Routes.GET_COMPANIES + `/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+    const response = await axiosInstance.request(config);
+    return response.data;
+  }
   
-  return { getAllCompanies, getPaginatedCompanies }
+  return { getAllCompanies, getPaginatedCompanies, companyById }
 }
 

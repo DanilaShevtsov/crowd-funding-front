@@ -7,7 +7,6 @@ import {
 const STATE = {
   token: null,
   address: null,
-  
 };
 
 const auth = (state = STATE, { type, payload }: { type: string, payload: any }) => {
@@ -20,6 +19,9 @@ const auth = (state = STATE, { type, payload }: { type: string, payload: any }) 
 
       localStorage.setItem('token', token);
       localStorage.setItem('address', address);
+
+      state.token = token;
+      state.address = address;
 
       return {
         ...state,
@@ -38,10 +40,12 @@ const auth = (state = STATE, { type, payload }: { type: string, payload: any }) 
     }
 
     case LOAD_AUTH: {
+      const token = localStorage.getItem('token');
+      const address = localStorage.getItem('address');
       return {
         ...state,
-        token: localStorage.getItem('token'),
-        address: localStorage.getItem('address'),
+        token: token,
+        address: address,
       }
     }
 

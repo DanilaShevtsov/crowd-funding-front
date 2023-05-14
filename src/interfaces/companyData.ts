@@ -4,15 +4,18 @@ export interface CompanyData {
   description: null | string;
   ownerId: string;
   status: string;
-  type: string;
+  type?: string;
   balance: number;
   goal: number;
   timeout: string;
   image: string;
+  followerCount: number;
   deletedAt: null | string;
   owner: {
     id: string;
     pubKey: string;
+    role: string;
+    banned: boolean;
     deletedAt: null | string;
   }
 }

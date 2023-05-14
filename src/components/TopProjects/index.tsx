@@ -22,8 +22,11 @@ function TopProjects(props: any) {
 
     async function loadCompanies() {
         const rawCompanies: Companies = await getPaginatedCompanies(auth.token, 0);
-        console.log('top-projects', rawCompanies);
         setListOfCompanies(rawCompanies.data);
+    }
+
+    function showCompanyPage(companyId: string) {
+        console.log('awwee', companyId);
     }
 
     useEffect(() => {
@@ -34,7 +37,6 @@ function TopProjects(props: any) {
     useEffect(() => {
         if (listOfCompanies.length > 0) {
             setLoaded(true);
-            console.log(loaded)
         }
     }, [listOfCompanies])
 
@@ -43,7 +45,7 @@ function TopProjects(props: any) {
             <div className='sub-title'>TOP 3 PROJECTS</div>
             <div className='companies'>
                 { loaded && listOfCompanies.length > 0 &&
-                    listOfCompanies.map((companyData: CompanyData) => <Company data={companyData} key={companyData.id} />)
+                    listOfCompanies.map((companyData: CompanyData) => <Company data={companyData} key={companyData.id} onChoose={showCompanyPage} />)
                 }
             </div>
         </div>

@@ -7,6 +7,7 @@ import { companiesLib } from '../../lib/companies';
 import { CompanyData } from '../../interfaces/companyData';
 
 import './index.css';
+import CompanyPage from '../CompanyPage';
 
 function AllProjects(props: any) {
     const {
@@ -18,6 +19,8 @@ function AllProjects(props: any) {
     const [loaded, setLoaded] = useState(false);
     const [totalItems, setTotalItems] = useState(0);
     const pageSize = 3;
+
+    const [chosenCompany, setChosenCompany] = useState('');
 
     const { getPaginatedCompanies } = companiesLib();
 
@@ -32,7 +35,11 @@ function AllProjects(props: any) {
         const rawCompanies = await getPaginatedCompanies(auth.token, page, pageSize);
         const {data: allProjects}= rawCompanies
         setListOfCompanies(allProjects);
-        console.log(page, pageSize);
+    }
+
+    function showCompanyPage(companyId: string) {
+        setChosenCompany(companyId);
+        console.log('awwee', companyId);
     }
 
     useEffect(() => {
@@ -43,25 +50,32 @@ function AllProjects(props: any) {
     useEffect(() => {
         if (listOfCompanies.length > 0) {
             setLoaded(true);
-            console.log(loaded)
         }
     }, [listOfCompanies])
 
     return (
-        <div className='all-projects'>
-            <div className='sub-title'>All Projects</div>
-            <div className='companies'>
-                { loaded && listOfCompanies.length > 0 &&
-                    listOfCompanies.map((companyData: CompanyData) => <Company data={companyData} key={companyData.id} />)
-                }
-            </div>
-            <Pagination
-                defaultPageSize={pageSize}
-                defaultCurrent={1}
-                total={totalItems}
-                onChange={changePage}
-            />
-        </div>
+        <>
+            { chosenCompany === '' &&
+                <div className='all-projects'>
+                    <div className='sub-title'>All Projects</div>
+                    <div className='companies'>
+                        { loaded && listOfCompanies.length > 0 &&
+                            listOfCompanies.map((companyData: CompanyData) => <Company data={companyData} key={companyData.id} onChoose={showCompanyPage} />)
+                        }
+                    </div>
+                    <Pagination
+                        defaultPageSize={pageSize}
+                        defaultCurrent={1}
+                        total={totalItems}
+                        onChange={changePage}
+                    />
+                </div>
+            }
+
+            { chosenCompany !== '' &&
+                <CompanyPage companyId={chosenCompany} token={auth.token} />
+            }
+        </>
     )
 }
 
