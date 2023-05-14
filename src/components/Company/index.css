@@ -2,6 +2,7 @@
     margin-bottom: 3%;
     display: flex;
     flex-basis: 30%;
+    max-height: 30%;
     background-color: white;
     align-items: stretch;
 }
