@@ -9,6 +9,7 @@ import { auth } from '../../../lib/auth'
 import actions  from '../../../redux/auth/actions';
 import { Pages } from '../../../enums/pages.enum';
 import { Role } from '../../../enums/roles.enum';
+import { User } from '../../../interfaces/user';
 
 const { Sider } = Layout;
 type MenuItem = Required<MenuProps>['items'][number];
@@ -43,19 +44,23 @@ const sideBarMenuItems: MenuItem[] = [
   { type: 'divider'} 
 ];
 
-function Sidebar(props: any) {
+interface SiderProps {
+    token?: AuthJWT;
+    user?: User;
+    onChangeMenu: (key: Pages) => void;
+}
+
+export default function Sidebar(props: SiderProps) {
   const {
-    authSuccess,
+    token,
+    user,
     onChangeMenu,
-    address,
-    token
   } = props
-  const { hooks, metamask, connectMetamask, signMessage } = useMetamask();
-  const { getWelcomeToken, login, verifyLogin } = auth();
-  const { useAccount, useIsActive, useIsActivating } = hooks;
+
+  const { hooks } = useMetamask();
+  const { useAccount } = hooks;
 
   const userAccount: string = useAccount() as string || '0x0000000000000000000000000000000000000000';
-  
 
   function processRole(role: string): string {
     switch (role) {
@@ -65,7 +70,6 @@ function Sidebar(props: any) {
       default: return 'UNKNOWN_ROLE'
     }
   }
-
 
   return (
       <Sider
@@ -82,10 +86,10 @@ function Sidebar(props: any) {
           </Button>
         }
 
-        {userAccount != '0x0000000000000000000000000000000000000000' && 
+        {userAccount != '0x0000000000000000000000000000000000000000' && user !== undefined &&
           <div>
             <p>{sliceAddress(userAccount)}</p>
-            <p>Role: {processRole(Role.SUPER_ADMIN)}</p>
+            <p>Role: {processRole(user.role)}</p>
           </div>
         }
         <Menu
@@ -93,15 +97,10 @@ function Sidebar(props: any) {
           items={sideBarMenuItems}
           defaultSelectedKeys={[Pages.MAIN]}
           onClick={({ key }) => {
-            onChangeMenu(key);
+            console.log(key);
+            // onChangeMenu(key);
           }}
         />
       </Sider>
   );
 }
-
-function mapStateToProps(state: any) {
-  return { onChangepage: (setPage: string) => state, ...auth }
-}
-
-export default connect(mapStateToProps, actions)(Sidebar)

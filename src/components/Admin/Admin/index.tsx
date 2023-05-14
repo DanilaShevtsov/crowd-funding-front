@@ -82,8 +82,7 @@ export default function Admin() {
 
     return (
         <div className='admin'>
-            <Button id='123' onClick={(e) => console.log(e.currentTarget.id)}>Click on me</Button>
-            { !isAuthorized &&
+            {isAuthorized &&
                 <>
                     <Header className='header' style={{ background: colorBgContainer }}>
                         <div
@@ -92,7 +91,7 @@ export default function Admin() {
                         <div className='title'>PROJECT NAME</div>
                     </Header>
                     <Layout className='workspace'>
-                        <Sidebar onChangeMenu={changeMenu} />
+                        <Sidebar token={token} user={user} onChangeMenu={changeMenu} />
                         <Layout>
                         <Content className='content'> 
                         </Content>
