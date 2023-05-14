@@ -30,14 +30,14 @@ function MyCompanies(props: any) {
     const pageSize = 3;
 
     async function loadCompanies(companyStatus: CompanyStatus) {
-        const rawCompanies = await getCompaniesByStatus(auth.token, 0, companyStatus, auth.userId, pageSize);
+        const rawCompanies = await getCompaniesByStatus(auth.token, 0, pageSize, companyStatus, auth.userId);
         const {data: allProjects}= rawCompanies
         setListOfCompanies(allProjects);
         setTotalItems(rawCompanies.meta.totalItems);
     }
 
     async function changePage(page: number, pageSize: number) {
-        const rawCompanies = await getCompaniesByStatus(auth.token, page, companyStatus, auth.userId);
+        const rawCompanies = await getCompaniesByStatus(auth.token, page, undefined, companyStatus, auth.userId);
         const {data: allProjects}= rawCompanies
         setListOfCompanies(allProjects);
     }

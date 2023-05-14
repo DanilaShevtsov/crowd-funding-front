@@ -41,7 +41,7 @@ export function companiesLib() {
     return response.data;
   }
 
-  async function getCompaniesByStatus(token: string, page: number, type?: CompanyStatus, userId?: string, size: number = 3): Promise<Companies> {
+  async function getCompaniesByStatus(token: string, page: number, size: number = 3, type?: CompanyStatus, userId?: string): Promise<Companies> {
     const config: AxiosRequestConfig = {
       method: 'post',
       url: Routes.GET_COMPANIES + `?page=${page}`,
@@ -53,7 +53,7 @@ export function companiesLib() {
         page: page,
         sortBy: "followerCount:DESC",
         "filter.status": `$eq:${type}`,
-        "filter.ownerId": `$eq:${userId}`
+        "filter.ownerId": userId ? `$eq:${userId}`: undefined
       }
     }
     

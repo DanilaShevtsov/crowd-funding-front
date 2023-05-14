@@ -52,6 +52,12 @@ export default function AllTransactions(props: AllTransactionsProps) {
       
     const columns: ColumnsType<DataType> = [
         {
+          title: 'TxId',
+          dataIndex: 'txId',
+          fixed: 'left',
+          key: 'txId',
+        },
+        {
           title: 'From',
           dataIndex: 'from',
           key: 'from',
@@ -72,11 +78,6 @@ export default function AllTransactions(props: AllTransactionsProps) {
           key: 'fee',
         },
         {
-          title: 'TxId',
-          dataIndex: 'txId',
-          key: 'txId',
-        },
-        {
           title: 'Company',
           dataIndex: 'companyName',
           key: 'companyName',
@@ -84,6 +85,7 @@ export default function AllTransactions(props: AllTransactionsProps) {
         {
           title: 'Status',
           key: 'status',
+          fixed: 'right',
           dataIndex: 'status',
           render: (_, { status }) => (
             <>
@@ -104,9 +106,10 @@ export default function AllTransactions(props: AllTransactionsProps) {
           transaction.from = sliceAddress(transaction.from);
           transaction.to = sliceAddress(transaction.to);
           transaction.txId = sliceAddress(transaction.txId);
-          transaction.value = roundNumber(transaction.value, 18, 6)
-          transaction.fee = roundNumber(transaction.fee, 18, 6)
+          transaction.value = roundNumber(transaction.value, 0, 10) + " ETH"
+          transaction.fee = roundNumber(transaction.fee, 0, 10) + " ETH"
           transaction.companyName = transaction.company.name;
+          console.log(transaction)
           return transaction;
         })
         setData(transactions);
@@ -126,7 +129,7 @@ export default function AllTransactions(props: AllTransactionsProps) {
 
     return (
       <>
-        { loaded && data !== undefined && <Table columns={columns} dataSource={data}/> }
+        { loaded && data !== undefined && <Table pagination={false} columns={columns} dataSource={data} scroll={{ x: 1500, y: 1000 }}/> }
       </>
     )
 }
