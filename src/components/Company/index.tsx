@@ -29,7 +29,11 @@ export default function Company({data, onChoose}: CompanyProps) {
                 { data.description == null && 
                     <span><i>Without description</i></span>
                 }
-                <Progress percent={Number((data.balance/ data.goal * 100).toFixed(2))} strokeColor={{ '0%': '#108ee9', '100%': '#87d068' }} />
+                <Progress
+                    percent={Number((data.balance/ data.goal * 100).toFixed(2))}
+                    strokeColor={{ '0%': '#108ee9', '100%': '#87d068' }}
+                    style={{width:'90%'}}
+                />
                 <div className='balance-progress'>
                     <span><b>Current Balance:</b> {roundNumber(data.balance, 0, 4)} ETH</span>
                     <span><b>Goal:</b> {roundNumber(data.goal, 0, 4)} ETH</span>
