@@ -11,6 +11,7 @@ import companiesActions from '../../redux/companies/actions';
 import { Pages } from '../../enums/pages.enum'
 
 import './index.css';
+import CreateCompanyForm from '../CreateCompanyForm';
 
 const { Header, Content, Footer } = Layout;
 
@@ -50,6 +51,7 @@ const App: React.FC = (props: any) => {
             <TopProjects/>
           }
           { page === Pages.ALL_PROJECTS && <AllProjects/>}
+          { page === Pages.CREATE_COMPANY && <CreateCompanyForm/>}
           </Content>
           <Footer className='footer'> Footer exists. Just trust me!</Footer>
         </Layout>

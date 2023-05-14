@@ -52,5 +52,21 @@ export function companiesLib() {
   }
   
   return { getAllCompanies, getPaginatedCompanies, companyById }
+  async function createNewCompany(token: string, dto: any): Promise<any> {
+    const config: AxiosRequestConfig = {
+      method: 'put',
+      url: Routes.GET_COMPANIES,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: dto
+    }
+
+
+    const response = await axiosInstance.request(config);
+    return response;
+  }
+  
+  return { getAllCompanies, getPaginatedCompanies, createNewCompany }
 }
 
