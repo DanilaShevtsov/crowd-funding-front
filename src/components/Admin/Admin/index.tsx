@@ -100,7 +100,7 @@ export default function Admin() {
                         { page === Pages.ALL_ACCOUNTS &&
                             <AllAccounts token={token}/>
                         }
-                        { page === Pages.ALL_TRANSACTIONS && <AllTransactions/>}
+                        { page === Pages.ALL_TRANSACTIONS && <AllTransactions token={token}/>}
                         { page === Pages.ALL_COMPANIES && <AllCompanies/>}
                         </Content>
                         <Footer className='footer'> Footer exists. Just trust me!</Footer>

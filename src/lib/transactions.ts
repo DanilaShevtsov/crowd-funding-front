@@ -24,5 +24,19 @@ export function transactions() {
     return response.data;
   }
 
-  return { sendTransaction }
+  async function getTransactions(token: string) {
+    const config: AxiosRequestConfig = {
+      method: 'post',
+      url: Routes.TRANSACTIONS_GET,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+
+    
+    const response = await axiosInstance.request(config);
+    return response.data;
+  }
+
+  return { sendTransaction, getTransactions }
 }

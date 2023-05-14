@@ -12,6 +12,7 @@ import { Pages } from '../../enums/pages.enum'
 
 import './index.css';
 import CreateCompanyForm from '../CreateCompanyForm';
+import MyCompanies from '../MyCompanies';
 
 const { Header, Content, Footer } = Layout;
 
@@ -52,6 +53,7 @@ const App: React.FC = (props: any) => {
           }
           { page === Pages.ALL_PROJECTS && <AllProjects/>}
           { page === Pages.CREATE_COMPANY && <CreateCompanyForm/>}
+          { page === Pages.MY_COMPANIES && <MyCompanies/>}
           </Content>
           <Footer className='footer'> Footer exists. Just trust me!</Footer>
         </Layout>

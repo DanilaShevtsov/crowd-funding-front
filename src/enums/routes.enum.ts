@@ -4,6 +4,7 @@ export enum Routes {
   CHECK_JWT = '/auth/check-jwt',
   GET_COMPANIES = '/company',
   TRANSACTIONS = '/transaction/store-transaction',
+  TRANSACTIONS_GET = '/transaction/get-all-transactions',
   USER_INFO = '/auth/info',
   ALL_ACCOUNTS = 'admin/account'
 }
