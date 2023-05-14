@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { Routes } from "../enums/routes.enum";
 import { AuthJWT } from "../interfaces/auth";
+import { User } from "../interfaces/user";
 
 export function auth() {
   const axiosInstance: AxiosInstance = axios.create({
@@ -48,5 +49,18 @@ export function auth() {
     return response.data;
   }
 
-  return { getWelcomeToken, login, verifyLogin };
+  async function getUserInfo(jwt: AuthJWT): Promise<User> {
+    const config: AxiosRequestConfig = {
+      method: 'get',
+      url: Routes.USER_INFO,
+      headers: {
+        Authorization: `Bearer ${jwt.token}`,
+      }
+    }
+
+    const response = await axiosInstance.request(config);
+    return response.data;
+  }
+
+  return { getWelcomeToken, login, verifyLogin, getUserInfo };
 }

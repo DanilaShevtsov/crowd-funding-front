@@ -1,13 +1,14 @@
 import { Layout, Button, Menu } from 'antd';
 import type { MenuProps } from 'antd';
-import { useMetamask } from '../../hooks/useMetamask';
+import { useMetamask } from '../../../hooks/useMetamask';
 import { useEffect, useState } from 'react';
-import { useAccountBalance } from '../../hooks/useAccountBalance';
+import { useAccountBalance } from '../../../hooks/useAccountBalance';
 import { connect } from 'react-redux';
-import { AuthJWT } from '../../interfaces/auth';
-import { auth } from '../../lib/auth'
-import actions  from '../../redux/auth/actions';
-import { Pages } from '../../enums/pages.enum';
+import { AuthJWT } from '../../../interfaces/auth';
+import { auth } from '../../../lib/auth'
+import actions  from '../../../redux/auth/actions';
+import { Pages } from '../../../enums/pages.enum';
+import { Role } from '../../../enums/roles.enum';
 
 const { Sider } = Layout;
 type MenuItem = Required<MenuProps>['items'][number];
@@ -50,49 +51,21 @@ function Sidebar(props: any) {
     token
   } = props
   const { hooks, metamask, connectMetamask, signMessage } = useMetamask();
-  const { getWelcomeToken, login, verifyLogin, getUserInfo } = auth();
+  const { getWelcomeToken, login, verifyLogin } = auth();
   const { useAccount, useIsActive, useIsActivating } = hooks;
 
   const userAccount: string = useAccount() as string || '0x0000000000000000000000000000000000000000';
-  const userBalance: number = useAccountBalance(userAccount) || 0;
-  const isActive: boolean = useIsActive();
-  const isActivating: boolean = useIsActivating();
+  
 
-  async function connect() {
-    connectMetamask();
-  }
-
-  async function web2Auth() {
-    console.log('auth')
-    const message:string = await getWelcomeToken(userAccount);
-    const signature: string = await signMessage(message, userAccount);
-    const jwt: AuthJWT = await login(message, userAccount, signature);
-    const authorized: boolean = await verifyLogin(jwt);
-    const user = await getUserInfo(jwt);
-
-    authSuccess({ token: jwt.token, address: userAccount, userId: user.id});
-    
-    if (!authorized) {
-      console.log('something went wrong');
+  function processRole(role: string): string {
+    switch (role) {
+      case Role.ADMIN: return 'Admin'
+      case Role.USER: return 'User'
+      case Role.SUPER_ADMIN: return 'Super Admin'
+      default: return 'UNKNOWN_ROLE'
     }
   }
 
-  useEffect(()=> {
-    if (
-        userAccount != '0x0000000000000000000000000000000000000000' && (
-        userAccount != address ||
-        token == null
-      )
-    ) {
-      web2Auth();
-    }
-  }, [userAccount])
-
-  useEffect(() => {
-    if (!isActive && !isActivating) {
-      metamask.connectEagerly();
-    }
-  }, [isActive, isActivating]);
 
   return (
       <Sider
@@ -112,7 +85,7 @@ function Sidebar(props: any) {
         {userAccount != '0x0000000000000000000000000000000000000000' && 
           <div>
             <p>{sliceAddress(userAccount)}</p>
-            <p>Balance: {userBalance} ETH</p>
+            <p>Role: {processRole(Role.SUPER_ADMIN)}</p>
           </div>
         }
         <Menu
