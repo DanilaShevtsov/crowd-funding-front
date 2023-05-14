@@ -1,0 +1,20 @@
+.account {
+    margin-bottom: 10px;
+}
+
+.account-prop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.account-prop-action-bar {
+    display: flex;
+    align-self: flex-end;
+    gap: 10px;
+}
+
+.positive-button {
+    color: mediumspringgreen;
+    border-color: mediumspringgreen;
+}

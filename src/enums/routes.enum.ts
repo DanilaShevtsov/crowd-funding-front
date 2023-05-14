@@ -5,4 +5,5 @@ export enum Routes {
   GET_COMPANIES = '/company',
   TRANSACTIONS = '/transaction/store-transaction',
   USER_INFO = '/auth/info',
+  ALL_ACCOUNTS = 'admin/account'
 }

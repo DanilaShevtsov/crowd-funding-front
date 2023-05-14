@@ -1,5 +1,5 @@
 export interface User {
-  id: number;
+  id: string;
   pubKey: string;
   role: string;
   banned: boolean;

@@ -25,7 +25,7 @@ export default function Admin() {
         token: { colorBgContainer },
     } = theme.useToken();
     
-    const [page, setPage] = useState('');
+    const [page, setPage] = useState(Pages.ALL_ACCOUNTS);
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [token, setToken] = useState<AuthJWT>();
     const [user, setUser] = useState<User>();
@@ -85,7 +85,7 @@ export default function Admin() {
 
     return (
         <div className='admin'>
-            {isAuthorized &&
+            {isAuthorized && token !== undefined &&
                 <>
                     <Header className='header' style={{ background: colorBgContainer }}>
                         <div
@@ -98,7 +98,7 @@ export default function Admin() {
                         <Layout>
                         <Content className='content'> 
                         { page === Pages.ALL_ACCOUNTS &&
-                            <AllAccounts/>
+                            <AllAccounts token={token}/>
                         }
                         { page === Pages.ALL_TRANSACTIONS && <AllTransactions/>}
                         { page === Pages.ALL_COMPANIES && <AllCompanies/>}

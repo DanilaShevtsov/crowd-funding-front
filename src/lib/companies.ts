@@ -17,7 +17,6 @@ export function companiesLib() {
       }
     }
 
-    
     const response = await axiosInstance.request(config);
     return response.data;
   }
