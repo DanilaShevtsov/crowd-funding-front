@@ -1,17 +1,21 @@
-import { Progress, Image } from 'antd';
+import { Progress, Image, InputNumber, Button } from 'antd';
 import { companiesLib } from '../../lib/companies'
 import { useEffect, useState } from 'react';
 import { CompanyData } from '../../interfaces/companyData';
-import { TeamOutlined, StarFilled, StarTwoTone } from '@ant-design/icons';
+import { TeamOutlined } from '@ant-design/icons';
+import { roundNumber } from '../../lib/numberLib';
+import { useMetamask } from '../../hooks/useMetamask';
+import { transactions } from '../../lib/transactions'
 
 import './index.css';
-import { roundNumber } from '../../lib/numberLib';
 
 interface CompanyPageProps {
     companyId: string
     token: string
 }
 const { companyById } = companiesLib();
+const { sendTransaction } = transactions();
+const DEFAULT_DONATE_VALUE: number = 0.05;
 
 function sliceAddress(address: string) {
     return address.slice(0, 15) + '...' + address.slice(-4);
@@ -30,10 +34,27 @@ function companyStatus(status: string) {
 export default function CompanyPage({ companyId, token }: CompanyPageProps) {
     const [company, setCompany] = useState<CompanyData>();
     const [loaded, setLoaded] = useState(false);
+    const [donateValue, setDonateValue] = useState(DEFAULT_DONATE_VALUE);
+
+    const { hooks, sendValue } = useMetamask();
+    const { useAccount } = hooks;
+
+    const userAccount: string = useAccount() as string || '0x0000000000000000000000000000000000000000';
 
     async function loadCompany() {
         setCompany(await companyById(token, companyId));
     }
+
+    async function donate(value: number) {
+        const from = userAccount;
+        const to = process.env.REACT_APP_SERVICE_WALLET as string;
+        console.log(to);
+        const wei = value * Math.pow(10, 18);
+        const tx: string = await sendValue(from, to, wei);
+
+        sendTransaction(token, companyId, tx)
+    }
+
     useEffect(() => {
         loadCompany();
     }, [])
@@ -69,7 +90,7 @@ export default function CompanyPage({ companyId, token }: CompanyPageProps) {
                         </div>
                         <div className='company-page-progress'>
                             <Progress type='circle' 
-                                percent={company.balance / company.goal * 100}
+                                percent={roundNumber(company.balance / company.goal * 100, 0, 4)}
                                 status={companyStatus(company.status)}    
                             />
                             <div className='followers'>
@@ -87,7 +108,26 @@ export default function CompanyPage({ companyId, token }: CompanyPageProps) {
                             <span><i>Without description</i></span>
                         }
                     </div>
-                    
+                    <div className='company-page-donate'>
+                        <span style={{ marginRight: '10px', width: '100%' }}><b>You can donate this project</b></span>
+                        <InputNumber
+                            addonAfter="ETH"
+                            style={{ width: '70%', marginRight: '10px', marginTop: '10px' }}
+                            defaultValue={DEFAULT_DONATE_VALUE}
+                            min={1/10**18}
+                            onChange={(value) => {
+                                setDonateValue(Number(value));
+                            }}
+                        />
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            onClick={() => {
+                                donate(donateValue);
+                            }}
+                            style={{ marginTop: '10px' }}
+                        >Donate</Button>
+                    </div>
                 </div>
             }
         </>

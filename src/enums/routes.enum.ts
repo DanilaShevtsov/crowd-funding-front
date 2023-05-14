@@ -3,4 +3,5 @@ export enum Routes {
   LOGIN = '/auth/login',
   CHECK_JWT = '/auth/check-jwt',
   GET_COMPANIES = '/company',
+  TRANSACTIONS = '/transaction/store-transaction'
 }

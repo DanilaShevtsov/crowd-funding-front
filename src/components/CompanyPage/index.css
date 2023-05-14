@@ -35,3 +35,11 @@
 .company-followers {
     display: flex;
 }
+
+.company-page-donate {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 5%;
+    align-items: center;
+    flex-wrap: wrap;
+}

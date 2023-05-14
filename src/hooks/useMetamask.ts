@@ -22,7 +22,24 @@ export function useMetamask() {
     return balance;
   }
 
+  async function sendValue(from: string, to: string, value: number): Promise<string> {
+    const gasPrice = await metamask.provider?.request({ method: 'eth_gasPrice' });
+    console.log(to);
+    const request = await metamask.provider?.request(
+      { method: 'eth_sendTransaction',
+        params: [{
+          from: from,
+          to: to, 
+          gas: (21000).toString(16),
+          gasPrice: (Number(gasPrice) * 1).toString(),
+          value: value.toString(16), 
+          data: "0x",
+        }]
+      }
+    );
+
+    return request as string
+  }
   
-  
-  return { connectMetamask, disconnectMetamask, hooks, metamask, signMessage, getBalance };
+  return { connectMetamask, disconnectMetamask, hooks, metamask, signMessage, getBalance, sendValue };
 }
