@@ -45,7 +45,9 @@ const sideBarMenuItems: MenuItem[] = [
 function Sidebar(props: any) {
   const {
     authSuccess,
-    onChangeMenu
+    onChangeMenu,
+    address,
+    token
   } = props
   const { hooks, metamask, connectMetamask, signMessage } = useMetamask();
   const { getWelcomeToken, login, verifyLogin } = auth();
@@ -74,16 +76,16 @@ function Sidebar(props: any) {
     }
   }
 
-  // useEffect(()=> {
-  //   if (
-  //       userAccount != '0x0000000000000000000000000000000000000000' && (
-  //       userAccount != address ||
-  //       token == null
-  //     )
-  //   ) {
-  //     web2Auth();
-  //   }
-  // }, [userAccount])
+  useEffect(()=> {
+    if (
+        userAccount != '0x0000000000000000000000000000000000000000' && (
+        userAccount != address ||
+        token == null
+      )
+    ) {
+      web2Auth();
+    }
+  }, [userAccount])
 
   useEffect(() => {
     if (!isActive && !isActivating) {
