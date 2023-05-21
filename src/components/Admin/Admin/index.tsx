@@ -12,6 +12,7 @@ import { Role } from '../../../enums/roles.enum';
 import AllAccounts from '../AllAccounts';
 import AllTransactions from '../AllTransactions';
 import AllCompanies from '../AllCompanies';
+import AllComplaints from '../AllComplaints';
 
 const { Header, Content, Footer } = Layout;
 
@@ -102,6 +103,7 @@ export default function Admin() {
                         }
                         { page === Pages.ALL_TRANSACTIONS && <AllTransactions token={token}/>}
                         { page === Pages.ALL_COMPANIES && <AllCompanies userId={user?.id as string} token={token}/>}
+                        { page === Pages.ALL_COMPLAINTS && <AllComplaints token={token}/>}
                         </Content>
                         <Footer className='footer'> Footer exists. Just trust me!</Footer>
                         </Layout>

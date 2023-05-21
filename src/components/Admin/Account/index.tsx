@@ -37,6 +37,9 @@ export default function Account({ user, token }: AccountProps) {
                 className="account-prop"
             >
                 Role: { user.role }
+                <div className="account-prop-action-bar">
+                    <Button>Promote</Button>
+                </div>
             </div>
             <hr/>
             <div
@@ -46,6 +49,15 @@ export default function Account({ user, token }: AccountProps) {
                 <div className="account-prop-action-bar">
                     {!banned && <Button danger onClick={ban}>Ban</Button>}
                     {banned && <Button className="positive-button" onClick={unban}>Unban</Button>}
+                </div>
+            </div>
+            <hr/>
+            <div
+                className="account-prop"
+            >
+                AML status: Checked
+                <div className="account-prop-action-bar">
+                    <Button className="positive-button" onClick={unban}>Check AML</Button>
                 </div>
             </div>
         </Card>

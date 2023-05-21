@@ -1,10 +1,12 @@
-import { Tag, Space } from "antd";
+import { Tag, Space, InputNumber, Button } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { AuthJWT } from "../../../interfaces/auth";
 import { roundNumber } from "../../../lib/numberLib";
 import { transactions } from "../../../lib/transactions";
 import { TransactionStatus } from "./status.enum";
+
+import './index.css'
 
 interface AllTransactionsProps {
     token?: AuthJWT
@@ -128,8 +130,28 @@ export default function AllTransactions(props: AllTransactionsProps) {
     const { getTransactions } = transactions();
 
     return (
-      <>
+      <div className='all-transactions'>
         { loaded && data !== undefined && <Table pagination={false} columns={columns} dataSource={data} scroll={{ x: 1500, y: 1000 }}/> }
-      </>
+        <div className='company-page-donate'>
+          <span style={{ marginRight: '10px', width: '100%' }}><b>Enter transaction id to do actions</b></span>
+          <InputNumber
+              addonAfter="Tx ID"
+              style={{ width: '70%', marginRight: '10px', marginTop: '10px' }}
+              min={1/10**18}
+          />
+          <Button
+              // type="primary"
+              // htmlType="submit"
+              className="positive-button"
+              style={{ marginTop: '10px', marginRight: '10px' }}
+          >Check AML</Button>
+          <Button
+              type="primary"
+              htmlType="submit"
+              danger
+              style={{ marginTop: '10px' }}
+          >Block</Button>
+        </div>
+      </div>
     )
 }

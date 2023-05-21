@@ -1,0 +1,6 @@
+.all-transactions {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: no-wrap;
+    max-width: 100%;
+}

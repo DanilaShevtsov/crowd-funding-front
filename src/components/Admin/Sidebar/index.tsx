@@ -34,6 +34,7 @@ const sideBarMenuItems: MenuItem[] = [
   getItem('All Accounts', Pages.ALL_ACCOUNTS),
   getItem('All Transactions', Pages.ALL_TRANSACTIONS),
   getItem('All Companies', Pages.ALL_COMPANIES),
+  getItem('All Complaints', Pages.ALL_COMPLAINTS),
 ];
 
 interface SiderProps {

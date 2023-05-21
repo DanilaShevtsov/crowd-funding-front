@@ -3,7 +3,7 @@ import { Layout, Breadcrumb, Button, Space, Pagination } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { CompanyData } from '../../../interfaces/companyData';
 import { companiesLib } from '../../../lib/companies';
-import Company from '../../Company';
+import Company from '../Company';
 import CompanyPage from '../../CompanyPage';
 import { AuthJWT } from '../../../interfaces/auth';
 import { CompanyStatus } from '../../MyCompanies/company-status.enum';
