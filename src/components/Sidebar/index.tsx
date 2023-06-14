@@ -1,4 +1,4 @@
-import { Layout, Button, Menu } from 'antd';
+import { Layout, Button, Menu, Modal } from 'antd';
 import type { MenuProps } from 'antd';
 import { useMetamask } from '../../hooks/useMetamask';
 import { useEffect, useState } from 'react';
@@ -68,20 +68,39 @@ function Sidebar(props: any) {
   }
 
   async function web2Auth() {
-    const message:string = await getWelcomeToken(userAccount);
-    const signature: string = await signMessage(message, userAccount);
-    const jwt: AuthJWT = await login(message, userAccount, signature);
-    const authorized: boolean = await verifyLogin(jwt);
-    const user = await getUserInfo(jwt);
-    setUser(user);
-    setCookie('token', jwt.token, { path: '/' });
-    setCookie('address', userAccount, { path: '/' });
-    setCookie('userId', user.id, { path: '/' });
-    
-    if (!authorized) {
-      console.log('something went wrong');
+    let message: any;
+    message = await getWelcomeToken(userAccount);
+    if (message.status === 403) {
+      showModal()
+    } else {
+      const signature: string = await signMessage(message.data, userAccount);
+      const jwt: AuthJWT = await login(message.data, userAccount, signature);
+      const authorized: boolean = await verifyLogin(jwt);
+      const user = await getUserInfo(jwt);
+      setUser(user);
+      setCookie('token', jwt.token, { path: '/' });
+      setCookie('address', userAccount, { path: '/' });
+      setCookie('userId', user.id, { path: '/' });
+      
+      if (!authorized) {
+        console.log('something went wrong');
+      }
     }
   }
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(()=> {
     if (
@@ -109,6 +128,9 @@ function Sidebar(props: any) {
         className='sider'
         width='none'  
       >
+         <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+            <p>You have been banned</p>
+          </Modal>
         {userAccount === '0x0000000000000000000000000000000000000000' &&
           <Button
             type='primary'

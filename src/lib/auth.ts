@@ -8,7 +8,7 @@ export function auth() {
     baseURL: process.env.REACT_APP_API_URL,
   });
 
-  async function getWelcomeToken(address: string): Promise<string> {
+  async function getWelcomeToken(address: string): Promise<any> {
     console.log('get welcome token');
     const config: AxiosRequestConfig = {
       method: 'get',
@@ -17,9 +17,13 @@ export function auth() {
         pubKey: address,
       }
     }
-
-    const welcomeToken = await axiosInstance.request(config);
-    return welcomeToken.data;
+    try {
+      const welcomeToken = await axiosInstance.request(config);
+      return welcomeToken
+    } catch(e: any) {
+      return e.response as any
+    }
+    
   }
 
   async function login(token: string, address: string, signature: string): Promise<AuthJWT> {

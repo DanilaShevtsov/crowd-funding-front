@@ -42,9 +42,9 @@ export default function Admin() {
     }
 
     async function web2Auth() {
-        const message:string = await getWelcomeToken(userAccount);
-        const signature: string = await signMessage(message, userAccount);
-        const jwt: AuthJWT = await login(message, userAccount, signature);
+        const message:any = await getWelcomeToken(userAccount);
+        const signature: string = await signMessage(message.data, userAccount);
+        const jwt: AuthJWT = await login(message.data, userAccount, signature);
         const authorized: boolean = await verifyLogin(jwt);
         const user = await getUserInfo(jwt);
         setToken(jwt);
