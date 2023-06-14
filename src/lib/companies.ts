@@ -62,6 +62,27 @@ export function companiesLib() {
     return response.data;
   }
 
+  async function getCompaniesByStatusMy(token: string, page: number, size: number = 3, type?: CompanyStatus, userId?: string): Promise<Companies> {
+    const config: AxiosRequestConfig = {
+      method: 'post',
+      url: Routes.GET_COMPANIES_MY + `?page=${page}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        limit: size,
+        page: page,
+        sortBy: "followerCount:DESC",
+        "filter.status": `$eq:${type}`,
+        "filter.ownerId": userId ? `$eq:${userId}`: undefined
+      }
+    }
+    
+
+    const response = await axiosInstance.request(config);
+    return response.data;
+  }
+
   async function companyById(token: string, id: string): Promise<CompanyData> {
     const config: AxiosRequestConfig = {
       method: 'get',
@@ -87,6 +108,6 @@ export function companiesLib() {
     return response;
   }
   
-  return { getAllCompanies, getPaginatedCompanies, createNewCompany, companyById, getCompaniesByStatus }
+  return { getAllCompanies, getPaginatedCompanies, createNewCompany, companyById, getCompaniesByStatus, getCompaniesByStatusMy }
 }
 

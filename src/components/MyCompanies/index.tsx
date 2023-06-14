@@ -25,19 +25,21 @@ function MyCompanies(props: any) {
     const [loaded, setLoaded] = useState(false);
     const [chosenCompany, setChosenCompany] = useState('');
 
-    const { getCompaniesByStatus } = companiesLib();
+    const { getCompaniesByStatusMy } = companiesLib();
     const [totalItems, setTotalItems] = useState(0);
     const pageSize = 3;
 
     async function loadCompanies(companyStatus: CompanyStatus) {
-        const rawCompanies = await getCompaniesByStatus(auth.token, 0, pageSize, companyStatus, auth.userId);
+        console.log(loadAuthStorage)
+        console.log(auth.token);
+        const rawCompanies = await getCompaniesByStatusMy(auth.token, 0, pageSize, companyStatus, loadAuthStorage);
         const {data: allProjects}= rawCompanies
         setListOfCompanies(allProjects);
         setTotalItems(rawCompanies.meta.totalItems);
     }
 
     async function changePage(page: number, pageSize: number) {
-        const rawCompanies = await getCompaniesByStatus(auth.token, page, undefined, companyStatus, auth.userId);
+        const rawCompanies = await getCompaniesByStatusMy(auth.token, page, undefined, companyStatus, auth.userId);
         const {data: allProjects}= rawCompanies
         setListOfCompanies(allProjects);
     }

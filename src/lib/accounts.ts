@@ -46,5 +46,31 @@ export function accounts() {
     return response;
   }
 
-  return { getAllUsers, banUser, unbanUser }
+  async function promote(token: string, userId: string) {
+    const config: AxiosRequestConfig = {
+      method: 'patch',
+      url: Routes.ALL_ACCOUNTS + `/improve/${userId}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    }
+    
+    const response = await axiosInstance.request(config);
+    return response;
+  }
+
+  async function demote(token: string, userId: string) {
+    const config: AxiosRequestConfig = {
+      method: 'patch',
+      url: Routes.ALL_ACCOUNTS + `/demote/${userId}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    }
+    
+    const response = await axiosInstance.request(config);
+    return response;
+  }
+
+  return { getAllUsers, banUser, unbanUser, promote, demote }
 }

@@ -31,6 +31,13 @@ export default function Account({ user, token }: AccountProps) {
         }
     }
 
+   /*  async function promote() {
+        const response = await promote(token.token, user.id);
+        if (response.status === 200) {
+            setBanned(false);
+        }
+    } */
+
     return (
         <Card className="account" type="inner" title={user.pubKey}>
             <div
