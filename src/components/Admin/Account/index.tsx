@@ -10,7 +10,7 @@ interface AccountProps {
     user: User;
 }
 
-const { banUser, unbanUser, promote } = accounts();
+const { banUser, unbanUser, promote, demote } = accounts();
 
 
 export default function Account({ user }: AccountProps) {
@@ -41,12 +41,12 @@ export default function Account({ user }: AccountProps) {
         }
     }
 
-   /*  async function promote() {
-        const response = await promote(cookies.token, user.id);
+    async function disimprove() {
+        const response = await demote(cookies.token, user.id);
         if (response.status === 200) {
-            setBanned(false);
+            setRole("user");
         }
-    } */
+    }
 
     return (
         <Card className="account" type="inner" title={user.pubKey}>
@@ -55,7 +55,12 @@ export default function Account({ user }: AccountProps) {
             >
                 Role: { role }
                 <div className="account-prop-action-bar">
-                    <Button onClick={improve}>Promote</Button>
+                    { role === "user" &&
+                        <Button onClick={improve}>Promote</Button>
+                    }
+                    { role === "admin" &&
+                        <Button onClick={disimprove}>Demote</Button>
+                    }
                 </div>
             </div>
             <hr/>
