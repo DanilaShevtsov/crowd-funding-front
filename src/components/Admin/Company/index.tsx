@@ -19,6 +19,7 @@ export default function Company({data, onChoose}: CompanyProps) {
     const [companyStatus, setCompanyStatus] = useState(data.status);
     
     async function closeCompany(token:string, id:string) {
+        console.log(token, id);
         const result = await cancelCompanyAdmin(token, id);
         if (result.status === 200) {
             setCompanyStatus(CompanyStatus.CANCELED);
@@ -67,7 +68,6 @@ export default function Company({data, onChoose}: CompanyProps) {
             </div>
             <div
             style={{ display: 'flex', flexDirection:'column-reverse', gap: '10px', alignItems: 'end' }}
-            onClick={() => {}}
             >
                 { companyStatus === CompanyStatus.RUNNING && 
                     <Button danger onClick={() => closeCompany(cookies.token, data.id)}>Close company</Button>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Layout, Breadcrumb, Button, Space, Pagination } from 'antd';
+import { Layout, Button, Space, Pagination } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { CompanyData } from '../../../interfaces/companyData';
 import { companiesLib } from '../../../lib/companies';
@@ -91,6 +91,9 @@ export default function MyCompanies() {
 
             { chosenCompany !== '' &&
                 <CompanyPage companyId={chosenCompany} token={cookies.token as string} />
+            }
+
+            { 
             }
         </>
     )

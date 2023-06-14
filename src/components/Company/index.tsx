@@ -1,15 +1,20 @@
 import { CompanyData } from '../../interfaces/companyData';
-import { Progress, Image } from 'antd';
+import { Progress, Image, Button, Modal, Form, Input, Radio } from 'antd';
 import { roundNumber } from '../../lib/numberLib';
 
 import './index.css';
+import { useState } from 'react';
 
 interface CompanyProps {
     data: CompanyData,
     onChoose: (companyId: string) => void
+    onComplaint?: (companyId: string) => void
 }
 
-export default function Company({data, onChoose}: CompanyProps) {
+
+
+export default function Company({data, onChoose, onComplaint}: CompanyProps) {
+
     return (
         <div className="company">
             <div className='company-image'>
@@ -39,6 +44,24 @@ export default function Company({data, onChoose}: CompanyProps) {
                     <span><b>Goal:</b> {roundNumber(data.goal, 0, 4)} ETH</span>
                 </div>
                 <span>Creator: {data.owner.pubKey}</span>
+            </div>
+            <div
+            style={{
+                display: 'flex',
+                flexDirection:'column-reverse',
+                gap: '10px',
+                alignItems: 'end',
+                paddingBottom: '10px',
+                paddingRight: '10px'
+            }}
+            onClick={() => {}}
+            >
+                { onComplaint !== undefined &&
+                    <Button danger
+                        style={{ width: '100%' }}
+                        onClick={() => onComplaint(data.id)}
+                    >Complaint</Button>
+                }
             </div>
         </div>
     );
