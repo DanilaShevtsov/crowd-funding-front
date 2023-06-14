@@ -61,7 +61,7 @@ export default function AllComplaints() {
         <div className='all-accounts'>
             <Card title={'All Complaints'}>
                     { loaded && listOfComplaints &&
-                         Object.keys(listOfComplaints).map((company) => <Complaint company={company} children={listOfComplaints[company]} />)
+                         Object.keys(listOfComplaints).map((company) => <Complaint company={company} children={listOfComplaints[company]} onClose={loadComplaints}/>)
                     }
             </Card>
         </div>
