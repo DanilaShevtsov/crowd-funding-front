@@ -10,4 +10,5 @@ export enum Routes {
   ALL_ACCOUNTS = 'admin/account',
   PROMOTE = "admin/account/improve",
   DEMOTE = "admin/account/demote",
+  COMPLAINT = "/complaint"
 }

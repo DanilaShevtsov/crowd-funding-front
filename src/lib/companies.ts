@@ -108,19 +108,32 @@ export function companiesLib() {
     return response;
   }
 
-  async function closeCompany(token: string, dto: any): Promise<any> {
+  async function cancelCompany(token: string, id: string): Promise<any> {
     const config: AxiosRequestConfig = {
-      method: 'put',
-      url: Routes.GET_COMPANIES,
+      method: 'delete',
+      url: Routes.GET_COMPANIES + `/cancel/${id}`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      data: dto
     }
 
     const response = await axiosInstance.request(config);
     return response;
   }
+
+  async function cancelCompanyAdmin(token: string, id: string): Promise<any> {
+    const config: AxiosRequestConfig = {
+      method: 'delete',
+      url: Routes.GET_COMPANIES + `/cancel-admin/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+
+    const response = await axiosInstance.request(config);
+    return response;
+  }
+  
   
   return { getAllCompanies, getPaginatedCompanies, createNewCompany, companyById, getCompaniesByStatus, getCompaniesByStatusMy }
 }
