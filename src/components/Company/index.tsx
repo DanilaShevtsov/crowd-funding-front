@@ -4,6 +4,12 @@ import { roundNumber } from '../../lib/numberLib';
 
 import './index.css';
 import { useState } from 'react';
+import { CompanyStatus } from '../MyCompanies/company-status.enum';
+import { companiesLib } from '../../lib/companies';
+import { useCookies } from 'react-cookie';
+
+const { cancelCompany } = companiesLib();
+
 
 interface CompanyProps {
     data: CompanyData,
@@ -14,6 +20,17 @@ interface CompanyProps {
 
 
 export default function Company({data, onChoose, onComplaint}: CompanyProps) {
+    const [companyStatus, setCompanyStatus] = useState(data.status);
+    
+    async function closeCompany(token:string, id:string) {
+        console.log(token, id);
+        const result = await cancelCompany(token, id);
+        if (result.status === 200) {
+            setCompanyStatus(CompanyStatus.CANCELED);
+        }
+    }
+
+    const [cookies, setCookie] = useCookies();
 
     return (
         <div className="company">
@@ -61,6 +78,9 @@ export default function Company({data, onChoose, onComplaint}: CompanyProps) {
                         style={{ width: '100%' }}
                         onClick={() => onComplaint(data.id)}
                     >Complaint</Button>
+                }
+                { companyStatus === CompanyStatus.RUNNING && 
+                    <Button danger onClick={() => closeCompany(cookies.token, data.id)}>Close company</Button>
                 }
             </div>
         </div>
