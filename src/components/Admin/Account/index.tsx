@@ -10,11 +10,12 @@ interface AccountProps {
     token: AuthJWT
 }
 
-const { banUser, unbanUser } = accounts();
+const { banUser, unbanUser, promote } = accounts();
 
 
 export default function Account({ user, token }: AccountProps) {
     const [banned, setBanned] = useState(user.banned);
+    const [role, setRole] = useState(user.role);
     
     async function ban() {
         const response = await banUser(token.token, user.id);
@@ -31,6 +32,14 @@ export default function Account({ user, token }: AccountProps) {
         }
     }
 
+    async function improve() {
+        const response:any = await promote(token.token, user.id);
+        console.log(response)
+        if (response.status === 200) {
+            setRole("admin");
+        }
+    }
+
    /*  async function promote() {
         const response = await promote(token.token, user.id);
         if (response.status === 200) {
@@ -43,9 +52,9 @@ export default function Account({ user, token }: AccountProps) {
             <div
                 className="account-prop"
             >
-                Role: { user.role }
+                Role: { role }
                 <div className="account-prop-action-bar">
-                    <Button>Promote</Button>
+                    <Button onClick={improve}>Promote</Button>
                 </div>
             </div>
             <hr/>
