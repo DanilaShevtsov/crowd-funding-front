@@ -3,9 +3,11 @@ import { Routes } from "../enums/routes.enum";
 import { Companies } from "../interfaces/companies";
 
 export class ComplaintStoreDto {
-    companyId: string
-    constructor(companyId: string) {
+    companyId: string;
+    complaint: string;
+    constructor(companyId: string, complaint: string) {
         this.companyId = companyId;
+        this.complaint = complaint;
     }
 }
 

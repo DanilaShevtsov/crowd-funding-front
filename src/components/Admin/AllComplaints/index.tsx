@@ -21,14 +21,14 @@ export default function AllComplaints() {
 
     async function loadComplaints() {
         const rawComplaints = await getAllComplaints(cookies.token as string);
-        const {data: allComplaints}= rawComplaints
         let companiesWithComplaints: any = {};
-        for(const complaint of allComplaints) {
-            if (!companiesWithComplaints.includes(complaint.company)) {
-                companiesWithComplaints[complaint.company] = []
+        for (const complaint of rawComplaints) {
+            if (!companiesWithComplaints[complaint.company.name]) {
+                companiesWithComplaints[complaint.company.name] = []
             }
-            companiesWithComplaints[complaint.company].push(complaint)
+            companiesWithComplaints[complaint.company.name].push(complaint)
         }
+        console.log(companiesWithComplaints)
         setListOfComplaints(companiesWithComplaints)
     }
 
@@ -60,7 +60,7 @@ export default function AllComplaints() {
     return (
         <div className='all-accounts'>
             <Card title={'All Complaints'}>
-                    { loaded && listOfComplaints.length > 0 &&
+                    { loaded && listOfComplaints &&
                          Object.keys(listOfComplaints).map((company) => <Complaint company={company} children={listOfComplaints[company]} />)
                     }
             </Card>
