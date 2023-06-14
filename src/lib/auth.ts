@@ -9,6 +9,7 @@ export function auth() {
   });
 
   async function getWelcomeToken(address: string): Promise<string> {
+    console.log('get welcome token');
     const config: AxiosRequestConfig = {
       method: 'get',
       url: Routes.WELCOME_PRASE,

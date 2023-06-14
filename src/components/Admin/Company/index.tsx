@@ -10,6 +10,7 @@ interface CompanyProps {
 }
 
 export default function Company({data, onChoose}: CompanyProps) {
+
     return (
         <div className="company">
             <div className='company-image'>

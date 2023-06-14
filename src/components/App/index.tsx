@@ -4,19 +4,16 @@ import { Layout, theme } from 'antd';
 import Sidebar from '../Sidebar';
 import TopProjects from '../TopProjects';
 import AllProjects from '../AllProjects';
-
-import { connect } from 'react-redux';
-import authActions from '../../redux/auth/actions';
-import companiesActions from '../../redux/companies/actions';
-import { Pages } from '../../enums/pages.enum'
-
-import './index.css';
 import CreateCompanyForm from '../CreateCompanyForm';
 import MyCompanies from '../MyCompanies';
 
+import { Pages } from '../../enums/pages.enum'
+
+import './index.css';
+
 const { Header, Content, Footer } = Layout;
 
-const App: React.FC = (props: any) => {
+const App: React.FC = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -27,12 +24,7 @@ const App: React.FC = (props: any) => {
     setPage(page);
   }
 
-  const {
-    loadAuthStorage
-  } = props
-
   useEffect(() => {
-    loadAuthStorage();
     setPage(Pages.MAIN)
   }, [])
 
@@ -50,10 +42,10 @@ const App: React.FC = (props: any) => {
           <Content className='content'> 
           { page === Pages.MAIN &&
             <TopProjects/>
-          }
-          { page === Pages.ALL_PROJECTS && <AllProjects/>}
-          { page === Pages.CREATE_COMPANY && <CreateCompanyForm/>}
-          { page === Pages.MY_COMPANIES && <MyCompanies/>}
+          } 
+          { page === Pages.ALL_PROJECTS && <AllProjects/> }
+          { page === Pages.CREATE_COMPANY && <CreateCompanyForm/> }
+          { page === Pages.MY_COMPANIES && <MyCompanies/> }
           </Content>
           <Footer className='footer'> Footer exists. Just trust me!</Footer>
         </Layout>
@@ -62,15 +54,4 @@ const App: React.FC = (props: any) => {
   );
 };
 
-const mapStateToProps = ({
-  auth,
-  companies
-}: any) => ({
-  auth,
-  companies
-});
-
-export default connect(mapStateToProps, {
-  ...authActions, 
-  ...companiesActions
-})(App);
+export default App;

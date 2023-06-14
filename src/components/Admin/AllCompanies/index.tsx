@@ -7,35 +7,29 @@ import Company from '../Company';
 import CompanyPage from '../../CompanyPage';
 import { AuthJWT } from '../../../interfaces/auth';
 import { CompanyStatus } from '../../MyCompanies/company-status.enum';
+import { useCookies } from 'react-cookie';
 
-interface AllTransactionsProps {
-    token?: AuthJWT;
-    userId: string;
-}
-
-export default function MyCompanies(props: AllTransactionsProps) {
-    const {
-        token
-    } = props
+export default function MyCompanies() {
     
     const [listOfCompanies, setListOfCompanies] = useState<CompanyData[]>([]);
     const [companyStatus, setCompanyStatus] = useState(CompanyStatus.RUNNING);
     const [loaded, setLoaded] = useState(false);
     const [chosenCompany, setChosenCompany] = useState('');
+    const [cookies, setCookie] = useCookies();
 
     const { getCompaniesByStatus } = companiesLib();
     const [totalItems, setTotalItems] = useState(0);
     const pageSize = 3;
 
     async function loadCompanies(companyStatus: CompanyStatus) {
-        const rawCompanies = await getCompaniesByStatus(token?.token as string, 0, pageSize, companyStatus);
+        const rawCompanies = await getCompaniesByStatus(cookies.token as string, 0, pageSize, companyStatus);
         const {data: allProjects}= rawCompanies
         setListOfCompanies(allProjects);
         setTotalItems(rawCompanies.meta.totalItems);
     }
 
     async function changePage(page: number, pageSize: number) {
-        const rawCompanies = await getCompaniesByStatus(token?.token as string, page, undefined, companyStatus);
+        const rawCompanies = await getCompaniesByStatus(cookies.token as string, page, undefined, companyStatus);
         const {data: allProjects}= rawCompanies
         setListOfCompanies(allProjects);
     }
@@ -97,7 +91,7 @@ export default function MyCompanies(props: AllTransactionsProps) {
             }
 
             { chosenCompany !== '' &&
-                <CompanyPage companyId={chosenCompany} token={token?.token as string} />
+                <CompanyPage companyId={chosenCompany} token={cookies.token as string} />
             }
         </>
     )

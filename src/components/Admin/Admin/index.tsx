@@ -13,6 +13,7 @@ import AllAccounts from '../AllAccounts';
 import AllTransactions from '../AllTransactions';
 import AllCompanies from '../AllCompanies';
 import AllComplaints from '../AllComplaints';
+import { useCookies } from 'react-cookie';
 
 const { Header, Content, Footer } = Layout;
 
@@ -30,6 +31,7 @@ export default function Admin() {
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [token, setToken] = useState<AuthJWT>();
     const [user, setUser] = useState<User>();
+    const [cookies, setCookie] = useCookies();
     
     const userAccount: string = useAccount() as string || '0x0000000000000000000000000000000000000000';
     const isActive: boolean = useIsActive();
@@ -44,7 +46,11 @@ export default function Admin() {
         const signature: string = await signMessage(message, userAccount);
         const jwt: AuthJWT = await login(message, userAccount, signature);
         const authorized: boolean = await verifyLogin(jwt);
+        const user = await getUserInfo(jwt);
         setToken(jwt);
+        setCookie('token', jwt.token, { path: '/admin' });
+        setCookie('address', userAccount, { path: '/admin' });
+        setCookie('userId', user.id, { path: '/admin' });
     
         if (!authorized) {
           console.log('something went wrong');
@@ -63,6 +69,7 @@ export default function Admin() {
     }
 
     useEffect(()=> {
+        setIsAuthorized(false);
         if (userAccount != '0x0000000000000000000000000000000000000000') {
           web2Auth();
         }
@@ -70,7 +77,7 @@ export default function Admin() {
 
     useEffect(() => {
         verifyUserRole();
-    }, [token])
+    }, [cookies])
 
     useEffect(() => {
         setIsAuthorized(false);
@@ -99,11 +106,11 @@ export default function Admin() {
                         <Layout>
                         <Content className='content'> 
                         { page === Pages.ALL_ACCOUNTS &&
-                            <AllAccounts token={token}/>
+                            <AllAccounts/>
                         }
-                        { page === Pages.ALL_TRANSACTIONS && <AllTransactions token={token}/>}
-                        { page === Pages.ALL_COMPANIES && <AllCompanies userId={user?.id as string} token={token}/>}
-                        { page === Pages.ALL_COMPLAINTS && <AllComplaints token={token}/>}
+                        { page === Pages.ALL_TRANSACTIONS && <AllTransactions/>}
+                        { page === Pages.ALL_COMPANIES && <AllCompanies/>}
+                        { page === Pages.ALL_COMPLAINTS && <AllComplaints/>}
                         </Content>
                         <Footer className='footer'> Footer exists. Just trust me!</Footer>
                         </Layout>

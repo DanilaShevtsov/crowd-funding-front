@@ -4,21 +4,22 @@ import { accounts } from "../../../lib/accounts";
 import './index.css'
 import { AuthJWT } from "../../../interfaces/auth";
 import { useState } from "react";
+import { useCookies } from "react-cookie";
 
 interface AccountProps {
     user: User;
-    token: AuthJWT
 }
 
 const { banUser, unbanUser, promote } = accounts();
 
 
-export default function Account({ user, token }: AccountProps) {
+export default function Account({ user }: AccountProps) {
     const [banned, setBanned] = useState(user.banned);
     const [role, setRole] = useState(user.role);
+    const [cookies, setCookie] = useCookies();
     
     async function ban() {
-        const response = await banUser(token.token, user.id);
+        const response = await banUser(cookies.token, user.id);
         if (response.status === 200) {
             setBanned(true);
         }
@@ -26,14 +27,14 @@ export default function Account({ user, token }: AccountProps) {
     }
 
     async function unban() {
-        const response = await unbanUser(token.token, user.id);
+        const response = await unbanUser(cookies.token, user.id);
         if (response.status === 200) {
             setBanned(false);
         }
     }
 
     async function improve() {
-        const response:any = await promote(token.token, user.id);
+        const response:any = await promote(cookies.token, user.id);
         console.log(response)
         if (response.status === 200) {
             setRole("admin");
@@ -41,7 +42,7 @@ export default function Account({ user, token }: AccountProps) {
     }
 
    /*  async function promote() {
-        const response = await promote(token.token, user.id);
+        const response = await promote(cookies.token, user.id);
         if (response.status === 200) {
             setBanned(false);
         }

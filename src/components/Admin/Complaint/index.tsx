@@ -2,20 +2,18 @@ import { Button, Card } from "antd";
 import { User } from "../../../interfaces/user";
 import { accounts } from "../../../lib/accounts";
 import './index.css'
-import { AuthJWT } from "../../../interfaces/auth";
 import { useState } from "react";
 
 interface ComplaintProps {
     title: string;
     complaint: string;
     from: string
-    token: AuthJWT
 }
 
 const { banUser, unbanUser } = accounts();
 
 
-export default function Complaint({ title, complaint, from, token }: ComplaintProps) {
+export default function Complaint({ title, complaint, from }: ComplaintProps) {
 
     return (
         <Card className="account" type="inner" title={title}>

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 
-import { connect } from 'react-redux';
-import authActions from '../../redux/auth/actions';
+
 import { companiesLib } from '../../lib/companies'; 
 import { CompanyData } from '../../interfaces/companyData';
+
+import { useCookies } from 'react-cookie';
 
 import './index.css';
 import { Button, DatePicker, Form, Input, InputNumber, message, notification, Upload, UploadProps } from 'antd';
@@ -12,22 +13,18 @@ import { PlusOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 const { RangePicker } = DatePicker;
 
-function CreateCompanyForm(props: any) {
+function CreateCompanyForm() {
   enum NotificationType {
     SUCCESS = 'success',
     INFO = 'info',
     WARNING = 'warning',
     ERROR = 'error'
   }
-
-  const {
-        auth,
-        loadAuthStorage,
-    } = props
     
     const [imageFile, setImageFile] = useState();
     const [createDescription, setCreateDescription] = useState("");
     const [createStatus, setCreateStatus] = useState<NotificationType>(NotificationType.INFO);
+    const [cookies, setCookie] = useCookies();
 
     const normFile = (e: any) => {
       if (Array.isArray(e)) {
@@ -46,6 +43,10 @@ function CreateCompanyForm(props: any) {
     };
 
     useEffect(() => {
+      console.log(cookies)
+    }, [])
+
+    useEffect(() => {
       if (createStatus === NotificationType.ERROR || createStatus === NotificationType.SUCCESS) {
         openNotificationWithIcon()
         setCreateDescription("")
@@ -54,14 +55,12 @@ function CreateCompanyForm(props: any) {
     }, [createStatus])
 
     const onFinish = async (values: any) => {
-      console.log(values)
       values.goal = Number(values.goal);
       values.timeout = values.timeout[1].toJSON();
       values.image = values.image[0].url;
-      console.log(values)
       const { createNewCompany } = companiesLib();
       try {
-        const result = await createNewCompany(auth.token, values);
+        const result = await createNewCompany(cookies.token, values);
         if (result.status === 200) {
           console.log(1)
           setCreateDescription('Company created')
@@ -160,12 +159,4 @@ function CreateCompanyForm(props: any) {
     )
 }
 
-const mapStateToProps = ({
-    auth,
-  }: any) => ({
-    auth,
-  });
-  
-  export default connect(mapStateToProps, {
-    ...authActions, 
-  })(CreateCompanyForm);
+export default CreateCompanyForm;

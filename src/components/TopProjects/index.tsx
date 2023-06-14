@@ -1,27 +1,24 @@
 import { useEffect, useState } from 'react';
 import Company from '../Company';
 
-import { connect } from 'react-redux';
-import authActions from '../../redux/auth/actions';
 import { companiesLib } from '../../lib/companies'; 
 import { CompanyData } from '../../interfaces/companyData';
+import { useCookies } from 'react-cookie';
+
 
 import './index.css';
 import { Companies } from '../../interfaces/companies';
 
-function TopProjects(props: any) {
-    const {
-        auth,
-        loadAuthStorage,
-    } = props
+function TopProjects() {
     
     const [listOfCompanies, setListOfCompanies] = useState<CompanyData[]>([]);
     const [loaded, setLoaded] = useState(false);
+    const [ cookies, setCookies ] = useCookies();
 
     const { getPaginatedCompanies } = companiesLib();
 
     async function loadCompanies() {
-        const rawCompanies: Companies = await getPaginatedCompanies(auth.token, 0);
+        const rawCompanies: Companies = await getPaginatedCompanies(cookies.token, 0);
         setListOfCompanies(rawCompanies.data);
     }
 
@@ -30,7 +27,6 @@ function TopProjects(props: any) {
     }
 
     useEffect(() => {
-        loadAuthStorage();
         loadCompanies();
     }, [])
 
@@ -52,12 +48,5 @@ function TopProjects(props: any) {
     )
 }
 
-const mapStateToProps = ({
-    auth,
-  }: any) => ({
-    auth,
-  });
   
-  export default connect(mapStateToProps, {
-    ...authActions, 
-  })(TopProjects);
+  export default TopProjects;

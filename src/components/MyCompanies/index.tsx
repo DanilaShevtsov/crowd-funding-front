@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import Company from '../Company';
 
-import { connect } from 'react-redux';
-import authActions from '../../redux/auth/actions';
+
 import { companiesLib } from '../../lib/companies'; 
 import { CompanyData } from '../../interfaces/companyData';
 
@@ -13,33 +12,29 @@ import { Content } from 'antd/es/layout/layout';
 import TopProjects from '../TopProjects';
 import { CompanyStatus } from './company-status.enum';
 import CompanyPage from '../CompanyPage';
+import { useCookies } from "react-cookie";
 
-function MyCompanies(props: any) {
-    const {
-        auth,
-        loadAuthStorage,
-    } = props
-    
+
+function MyCompanies() {    
     const [listOfCompanies, setListOfCompanies] = useState<CompanyData[]>([]);
     const [companyStatus, setCompanyStatus] = useState(CompanyStatus.RUNNING);
     const [loaded, setLoaded] = useState(false);
     const [chosenCompany, setChosenCompany] = useState('');
+    const [cookies, setCookies] = useCookies();
 
     const { getCompaniesByStatusMy } = companiesLib();
     const [totalItems, setTotalItems] = useState(0);
     const pageSize = 3;
 
     async function loadCompanies(companyStatus: CompanyStatus) {
-        console.log(loadAuthStorage)
-        console.log(auth.token);
-        const rawCompanies = await getCompaniesByStatusMy(auth.token, 0, pageSize, companyStatus, loadAuthStorage);
+        const rawCompanies = await getCompaniesByStatusMy(cookies.token, 0, pageSize, companyStatus, cookies.userId);
         const {data: allProjects}= rawCompanies
         setListOfCompanies(allProjects);
         setTotalItems(rawCompanies.meta.totalItems);
     }
 
     async function changePage(page: number, pageSize: number) {
-        const rawCompanies = await getCompaniesByStatusMy(auth.token, page, undefined, companyStatus, auth.userId);
+        const rawCompanies = await getCompaniesByStatusMy(cookies.token, page, undefined, companyStatus, cookies.userId);
         const {data: allProjects}= rawCompanies
         setListOfCompanies(allProjects);
     }
@@ -54,7 +49,9 @@ function MyCompanies(props: any) {
     }
 
     useEffect(() => {
-        loadAuthStorage();
+        console.log(cookies.userId);
+        console.log(cookies.token);
+        console.log(cookies.address);
         loadCompanies(companyStatus);
     }, [companyStatus])
 
@@ -102,18 +99,10 @@ function MyCompanies(props: any) {
             }
 
             { chosenCompany !== '' &&
-                <CompanyPage companyId={chosenCompany} token={auth.token} />
+                <CompanyPage companyId={chosenCompany} token={cookies.token} />
             }
         </>
     )
 }
-
-const mapStateToProps = ({
-    auth,
-  }: any) => ({
-    auth,
-  });
   
-  export default connect(mapStateToProps, {
-    ...authActions, 
-  })(MyCompanies);
+export default MyCompanies;

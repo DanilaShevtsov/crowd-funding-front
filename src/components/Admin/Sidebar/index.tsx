@@ -1,7 +1,7 @@
 import { Layout, Button, Menu } from 'antd';
 import type { MenuProps } from 'antd';
 import { useMetamask } from '../../../hooks/useMetamask';
-import { connect } from 'react-redux';
+
 import { AuthJWT } from '../../../interfaces/auth';
 import { Pages } from '../enums/pages.enum';
 import { Role } from '../../../enums/roles.enum';
@@ -45,7 +45,6 @@ interface SiderProps {
 
 export default function Sidebar(props: SiderProps) {
   const {
-    token,
     user,
     onChangeMenu,
   } = props
@@ -73,7 +72,7 @@ export default function Sidebar(props: SiderProps) {
           <Button
             type='primary'
             block={true}
-            onClick={connect}
+            // onClick={connect}
           >
             Connect Metamask
           </Button>

@@ -1,38 +1,36 @@
 import { useEffect, useState } from 'react';
 import { Pagination } from 'antd';
+import { useCookies } from "react-cookie";
+
 import Company from '../Company';
-import { connect } from 'react-redux';
-import authActions from '../../redux/auth/actions';
+import CompanyPage from '../CompanyPage';
+
 import { companiesLib } from '../../lib/companies'; 
 import { CompanyData } from '../../interfaces/companyData';
 
 import './index.css';
-import CompanyPage from '../CompanyPage';
 
 function AllProjects(props: any) {
-    const {
-        auth,
-        loadAuthStorage,
-    } = props
-    
+   
     const [listOfCompanies, setListOfCompanies] = useState<CompanyData[]>([]);
     const [loaded, setLoaded] = useState(false);
     const [totalItems, setTotalItems] = useState(0);
     const pageSize = 3;
 
     const [chosenCompany, setChosenCompany] = useState('');
+    const [cookies, setCookie] = useCookies();
 
     const { getPaginatedCompanies } = companiesLib();
 
     async function loadCompanies() {
-        const rawCompanies = await getPaginatedCompanies(auth.token, 0, pageSize);
+        const rawCompanies = await getPaginatedCompanies(cookies.token, 0, pageSize);
         const {data: allProjects}= rawCompanies
         setListOfCompanies(allProjects);
         setTotalItems(rawCompanies.meta.totalItems);
     }
 
     async function changePage(page: number, pageSize: number) {
-        const rawCompanies = await getPaginatedCompanies(auth.token, page, pageSize);
+        const rawCompanies = await getPaginatedCompanies(cookies.token, page, pageSize);
         const {data: allProjects}= rawCompanies
         setListOfCompanies(allProjects);
     }
@@ -43,7 +41,6 @@ function AllProjects(props: any) {
     }
 
     useEffect(() => {
-        loadAuthStorage();
         loadCompanies();
     }, [])
 
@@ -73,18 +70,11 @@ function AllProjects(props: any) {
             }
 
             { chosenCompany !== '' &&
-                <CompanyPage companyId={chosenCompany} token={auth.token} />
+                <CompanyPage companyId={chosenCompany} token={cookies.token} />
             }
         </>
     )
 }
 
-const mapStateToProps = ({
-    auth,
-  }: any) => ({
-    auth,
-  });
   
-  export default connect(mapStateToProps, {
-    ...authActions, 
-  })(AllProjects);
+export default AllProjects;

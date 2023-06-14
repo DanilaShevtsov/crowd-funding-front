@@ -107,6 +107,20 @@ export function companiesLib() {
     const response = await axiosInstance.request(config);
     return response;
   }
+
+  async function closeCompany(token: string, dto: any): Promise<any> {
+    const config: AxiosRequestConfig = {
+      method: 'put',
+      url: Routes.GET_COMPANIES,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: dto
+    }
+
+    const response = await axiosInstance.request(config);
+    return response;
+  }
   
   return { getAllCompanies, getPaginatedCompanies, createNewCompany, companyById, getCompaniesByStatus, getCompaniesByStatusMy }
 }

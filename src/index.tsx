@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './components/App';
 import Admin from './components/Admin/Admin';
 import "./index.css"
-import { Provider } from 'react-redux';
-import store from './redux/store';
+import { CookiesProvider } from "react-cookie";
 
 import {
   createBrowserRouter,
@@ -27,7 +26,7 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <Provider store={store}>
+  <CookiesProvider>
     <RouterProvider router={router} />
-  </Provider>
+  </CookiesProvider>
 );

@@ -1,7 +1,0 @@
-const COMPANIES_REQUESTED = 'companies/REQUESTED';
-const LOAD_COMPANIES = 'companies/LOAD';
-
-export {
-  COMPANIES_REQUESTED,
-  LOAD_COMPANIES,
-};

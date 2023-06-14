@@ -13,6 +13,7 @@ export function useMetamask() {
   }
 
   async function signMessage(message: string, account: string): Promise<string> {
+    console.log('signing')
     const signature: string = await metamask.provider?.request({ method: 'personal_sign', params: [message, account] }) as string;
     return signature;
   }

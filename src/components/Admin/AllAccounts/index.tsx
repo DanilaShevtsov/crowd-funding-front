@@ -7,19 +7,17 @@ import { User } from '../../../interfaces/user';
 import { UsersDto } from '../../../interfaces/usersDto';
 import { AuthJWT } from '../../../interfaces/auth';
 import { accounts } from '../../../lib/accounts';
-
-interface AllAccountsProps {
-    token: AuthJWT;
-}
+import { useCookies } from 'react-cookie';
 
 const { getAllUsers } = accounts();
 
-export default function AllAccounts({ token }: AllAccountsProps) {
+export default function AllAccounts() {
     const [users, setUsers] = useState<UsersDto>();
     const [loaded, setLoaded] = useState(false);
+    const [cookies, setCookie] = useCookies();
 
     async function loadUsers() {
-        const response = await getAllUsers(token.token);
+        const response = await getAllUsers(cookies.token);
         setUsers(response);
     }
 
@@ -37,7 +35,7 @@ export default function AllAccounts({ token }: AllAccountsProps) {
         <div className='all-accounts'>
             <Card title={'All Accounts'}>
                 { loaded && users !== undefined &&
-                    users.data.map((user: User) => <Account user={user} token={token} key={user.id} />)
+                    users.data.map((user: User) => <Account user={user} key={user.id} />)
                 }
                 
             </Card>

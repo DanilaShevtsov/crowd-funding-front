@@ -3,14 +3,14 @@ import type { MenuProps } from 'antd';
 import { useMetamask } from '../../hooks/useMetamask';
 import { useEffect, useState } from 'react';
 import { useAccountBalance } from '../../hooks/useAccountBalance';
-import { connect } from 'react-redux';
+
 import { AuthJWT } from '../../interfaces/auth';
 import { auth } from '../../lib/auth'
-import actions  from '../../redux/auth/actions';
 import { Pages } from '../../enums/pages.enum';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../../interfaces/user';
 import { Role } from '../../enums/roles.enum';
+import { useCookies } from "react-cookie";
 
 const { Sider } = Layout;
 type MenuItem = Required<MenuProps>['items'][number];
@@ -48,10 +48,7 @@ const sideBarMenuItems: MenuItem[] = [
 function Sidebar(props: any) {
   const navigate = useNavigate();
   const {
-    authSuccess,
     onChangeMenu,
-    address,
-    token
   } = props
   const { hooks, metamask, connectMetamask, signMessage } = useMetamask();
   const { getWelcomeToken, login, verifyLogin, getUserInfo } = auth();
@@ -59,24 +56,26 @@ function Sidebar(props: any) {
 
   const userAccount: string = useAccount() as string || '0x0000000000000000000000000000000000000000';
   const userBalance: number = useAccountBalance(userAccount) || 0;
-  const isActive: boolean = useIsActive();
-  const isActivating: boolean = useIsActivating();
+  // const isActive: boolean = useIsActive();
+  // const isActivating: boolean = useIsActivating();
 
   const [user, setUser] = useState<User>();
+  const [cookies, setCookie] = useCookies();
 
   async function connect() {
     connectMetamask();
   }
 
   async function web2Auth() {
-    console.log('auth')
     const message:string = await getWelcomeToken(userAccount);
     const signature: string = await signMessage(message, userAccount);
     const jwt: AuthJWT = await login(message, userAccount, signature);
     const authorized: boolean = await verifyLogin(jwt);
     const user = await getUserInfo(jwt);
     setUser(user);
-    authSuccess({ token: jwt.token, address: userAccount, userId: user.id});
+    setCookie('token', jwt.token, { path: '/' });
+    setCookie('address', userAccount, { path: '/' });
+    setCookie('userId', user.id, { path: '/' });
     
     if (!authorized) {
       console.log('something went wrong');
@@ -86,19 +85,19 @@ function Sidebar(props: any) {
   useEffect(()=> {
     if (
         userAccount != '0x0000000000000000000000000000000000000000' && (
-        userAccount != address ||
-        token == null
+        userAccount != cookies.address ||
+        cookies.token == null
       )
     ) {
       web2Auth();
     }
   }, [userAccount])
 
-  useEffect(() => {
-    if (!isActive && !isActivating) {
-      metamask.connectEagerly();
-    }
-  }, [isActive, isActivating]);
+  // useEffect(() => {
+  //   if (!isActive && !isActivating) {
+  //     metamask.connectEagerly();
+  //   }
+  // }, [isActive, isActivating]);
 
   return (
       <Sider
@@ -121,7 +120,7 @@ function Sidebar(props: any) {
 
         {userAccount != '0x0000000000000000000000000000000000000000' && 
           <div>
-            <p>{sliceAddress(userAccount)}</p>
+            <p>{sliceAddress(cookies.address)}</p>
             <p>Balance: {userBalance} ETH</p>
           </div>
         }
@@ -142,8 +141,4 @@ function Sidebar(props: any) {
   );
 }
 
-function mapStateToProps(state: any) {
-  return { onChangepage: (setPage: string) => state, ...auth }
-}
-
-export default connect(mapStateToProps, actions)(Sidebar)
+export default Sidebar

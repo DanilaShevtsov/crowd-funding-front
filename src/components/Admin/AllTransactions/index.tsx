@@ -7,28 +7,26 @@ import { transactions } from "../../../lib/transactions";
 import { TransactionStatus } from "./status.enum";
 
 import './index.css'
+import { useCookies } from "react-cookie";
 
-interface AllTransactionsProps {
-    token?: AuthJWT
-}
 
-export default function AllTransactions(props: AllTransactionsProps) {
+
+export default function AllTransactions() {
+  const [cookies, setCookie] = useCookies();
+
   function sliceAddress(address: string) {
     return address.slice(0, 15) + '...' + address.slice(-4);
   }
 
-  const {
-    token,
-  } = props
-    interface DataType {
-        from: string;
-        to: string;
-        value: number;
-        fee: number;
-        txId: string;
-        companyName: string;
-        status: string;
-      }
+  interface DataType {
+      from: string;
+      to: string;
+      value: number;
+      fee: number;
+      txId: string;
+      companyName: string;
+      status: string;
+    }
     function colorStatus(status: any) {
         let color: any;
         switch (status) {
@@ -103,7 +101,7 @@ export default function AllTransactions(props: AllTransactionsProps) {
       const [loaded, setLoaded] = useState(false);
 
       async function getData() {
-        const transactions = (await getTransactions(token?.token as string)).data;
+        const transactions = (await getTransactions(cookies.token as string)).data;
         transactions.map((transaction: any) => {
           transaction.from = sliceAddress(transaction.from);
           transaction.to = sliceAddress(transaction.to);
