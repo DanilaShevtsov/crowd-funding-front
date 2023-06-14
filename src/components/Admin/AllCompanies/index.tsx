@@ -5,7 +5,6 @@ import { CompanyData } from '../../../interfaces/companyData';
 import { companiesLib } from '../../../lib/companies';
 import Company from '../Company';
 import CompanyPage from '../../CompanyPage';
-import { AuthJWT } from '../../../interfaces/auth';
 import { CompanyStatus } from '../../MyCompanies/company-status.enum';
 import { useCookies } from 'react-cookie';
 

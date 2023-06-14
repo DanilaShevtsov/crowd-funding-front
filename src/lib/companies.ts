@@ -135,6 +135,6 @@ export function companiesLib() {
   }
   
   
-  return { getAllCompanies, getPaginatedCompanies, createNewCompany, companyById, getCompaniesByStatus, getCompaniesByStatusMy }
+  return { getAllCompanies, getPaginatedCompanies, createNewCompany, companyById, getCompaniesByStatus, getCompaniesByStatusMy, cancelCompany, cancelCompanyAdmin }
 }
 
