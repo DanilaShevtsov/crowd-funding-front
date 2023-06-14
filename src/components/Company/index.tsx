@@ -79,7 +79,7 @@ export default function Company({data, onChoose, onComplaint}: CompanyProps) {
                         onClick={() => onComplaint(data.id)}
                     >Complaint</Button>
                 }
-                { companyStatus === CompanyStatus.RUNNING && cookies.address === data.owner.pubKey && 
+                { companyStatus === CompanyStatus.RUNNING && cookies.address.toLowerCase() === data.owner.pubKey.toLowerCase() && 
                     <Button danger onClick={() => closeCompany(cookies.token, data.id)}>Close company</Button>
                 }
             </div>
