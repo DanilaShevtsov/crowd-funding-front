@@ -32,6 +32,7 @@ function getItem(
   }
 
 function sliceAddress(address: string) {
+  address = address || '0x0000000000000000000000000000000000000000';
   return address.slice(0, 15) + '...' + address.slice(-4);
 }
 
@@ -86,7 +87,7 @@ function Sidebar(props: any) {
     if (
         userAccount != '0x0000000000000000000000000000000000000000' && (
         userAccount != cookies.address ||
-        cookies.token == null
+        cookies.token == undefined
       )
     ) {
       web2Auth();

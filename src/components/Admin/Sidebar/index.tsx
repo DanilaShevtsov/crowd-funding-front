@@ -27,6 +27,7 @@ function getItem(
   }
 
 function sliceAddress(address: string) {
+  address = address || '0x0000000000000000000000000000000000000000';
   return address.slice(0, 15) + '...' + address.slice(-4);
 }
 
