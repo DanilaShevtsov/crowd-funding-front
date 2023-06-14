@@ -8,13 +8,29 @@ import { UsersDto } from '../../../interfaces/usersDto';
 import { AuthJWT } from '../../../interfaces/auth';
 import { accounts } from '../../../lib/accounts';
 import { useCookies } from 'react-cookie';
+import { complaintsLib } from '../../../lib/complaints';
 
 const { getAllUsers } = accounts();
+const { getAllComplaints } = complaintsLib();
 
 export default function AllComplaints() {
     const [users, setUsers] = useState<UsersDto>();
+    const [listOfComplaints, setListOfComplaints] = useState<any>();
     const [loaded, setLoaded] = useState(false);
     const [cookies, setCookie] = useCookies();
+
+    async function loadComplaints() {
+        const rawComplaints = await getAllComplaints(cookies.token as string);
+        const {data: allComplaints}= rawComplaints
+        let companiesWithComplaints: any = {};
+        for(const complaint of allComplaints) {
+            if (!companiesWithComplaints.includes(complaint.company)) {
+                companiesWithComplaints[complaint.company] = []
+            }
+            companiesWithComplaints[complaint.company].push(complaint)
+        }
+        setListOfComplaints(companiesWithComplaints)
+    }
 
     async function loadUsers() {
         const response = await getAllUsers(cookies.token);
@@ -26,6 +42,16 @@ export default function AllComplaints() {
     }, [])
 
     useEffect(() => {
+        if (listOfComplaints) {
+            setLoaded(true);
+        }
+    }, [listOfComplaints])
+
+    useEffect(() => {
+        loadComplaints();
+    }, [])
+
+    useEffect(() => {
         if (users !== undefined) {
             setLoaded(true);
         }
@@ -34,10 +60,9 @@ export default function AllComplaints() {
     return (
         <div className='all-accounts'>
             <Card title={'All Complaints'}>
-            <Complaint title={'Test Company 1'} complaint={'Я хочу поделиться своим негативным опытом с пользователем краудфандинговой платформы. Он не только не выполнил обещания, но и не отвечал на мои сообщения и звонки. Я вложил в его проект значительную сумму денег и теперь чувствую себя обманутым. Я надеюсь, что администрация платформы примет меры по защите прав инвесторов и предотвратит подобные случаи в будущем.'} from={'0x5F5153c5642d88d7d1f36198697dbf76c75273d6'} />
-            <Complaint title={'Test Company 2'} complaint={'Я хочу выразить свою глубокую обиду и разочарование по поводу проекта, на который я вложил значительную сумму денег через краудфандинговую платформу. Обещания создателя проекта не были выполнены, а он не отвечал на мои сообщения и звонки. Я чувствую себя обманутым и недовольным тем, как были обращены с моими инвестициями. Я надеюсь, что администрация платформы проведет расследование и примет меры по защите прав инвесторов, чтобы подобные случаи не повторились в будущем.'} from={'0x4776Ec9158a37948a2aA42F5180fB0468D46F700'} />
-            <Complaint title={'Test Company 3'} complaint={'Я очень расстроен и обижен на создателя краудфандингового проекта, в который я вложил значительную сумму денег. Обещания, данного им ранее, не были выполнены, а он не отвечал на мои сообщения и звонки. Я чувствую себя обманутым и недовольным тем, как были обращены с моими инвестициями. Я надеюсь, что администрация платформы проведет расследование и примет меры по защите прав инвесторов, чтобы подобные случаи не повторились в будущем.'} from={'0x16f93765e1B473a4AbcA9c868fc55B39E93e4f5E'} />
-            <Complaint title={'Test Company 4'} complaint={'Уважаемая администрация краудфандинговой платформы, я обращаюсь к вам с жалобой на создателя проекта, в который я вложил большую сумму денег. К сожалению, обещания, данного им ранее, не были выполнены, а он не отвечал на мои сообщения и звонки. Я чувствую себя обманутым и недовольным тем, как были обращены с моими инвестициями. Я надеюсь, что вы проведете расследование и примете меры по защите прав инвесторов, чтобы подобные случаи не повторились в будущем. Благодарю за внимание.'} from={'0x20498Db09c78075BC2fE28af5fBE4EaAB878fff4'} />
+                    { loaded && listOfComplaints.length > 0 &&
+                         Object.keys(listOfComplaints).map((company) => <Complaint company={company} children={listOfComplaints[company]} />)
+                    }
             </Card>
         </div>
     )

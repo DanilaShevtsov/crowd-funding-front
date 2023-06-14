@@ -5,29 +5,30 @@ import './index.css'
 import { useState } from "react";
 
 interface ComplaintProps {
-    title: string;
-    complaint: string;
-    from: string
+    company: string,
+    children: any[]
 }
 
 const { banUser, unbanUser } = accounts();
 
 
-export default function Complaint({ title, complaint, from }: ComplaintProps) {
+export default function Complaint({ company, children }: ComplaintProps) {
 
     return (
-        <Card className="account" type="inner" title={title}>
-            
-            <div className="account-complaint">
+        <Card className="account" type="inner" title={company}>
+            {children.map((children) => {
+                return <div className="account-complaint" key={children.id}>
                 <span>Complaint</span>
-                <span><b>From: {from}</b></span>
+                <span><b>From: {children.user.pubKey}</b></span>
                 <span
                     style={{ border: '0.5px solid black', padding: '10px' }}
-                >{complaint}</span>
+                >{children.user.pubKey}</span>
                 <Button
                     style={{ flexBasis: '10%', alignSelf: 'flex-end', width: '30%' }}
                 >Close Complaint</Button>
             </div>
+            })}
+            
         </Card>
     )
 }

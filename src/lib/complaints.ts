@@ -14,7 +14,7 @@ export function complaintsLib() {
     baseURL: process.env.REACT_APP_API_URL,
   });
 
-  async function getAllComplaints(token: string): Promise<Companies> {
+  async function getAllComplaints(token: string) {
     const config: AxiosRequestConfig = {
       method: 'get',
       url: Routes.COMPLAINT,
@@ -27,7 +27,7 @@ export function complaintsLib() {
     return response.data;
   }
 
-  async function storeComplaint(token: string, dto: ComplaintStoreDto): Promise<Companies> {
+  async function storeComplaint(token: string, dto: ComplaintStoreDto) {
     const config: AxiosRequestConfig = {
       method: 'put',
       url: Routes.COMPLAINT,
@@ -41,7 +41,7 @@ export function complaintsLib() {
     return response.data;
   }
 
-  async function removeComplaint(token: string, id: string): Promise<Companies> {
+  async function removeComplaint(token: string, id: string) {
     const config: AxiosRequestConfig = {
       method: 'delete',
       url: Routes.COMPLAINT,

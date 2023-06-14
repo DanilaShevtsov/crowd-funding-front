@@ -44,6 +44,7 @@ export default function Company({data, onChoose}: CompanyProps) {
                 >
                     <span>Creator: {data.owner.pubKey}</span>
                     <Button danger>Close company</Button>
+                    <Button danger>Complaint</Button>
                 </div>
             </div>
         </div>
